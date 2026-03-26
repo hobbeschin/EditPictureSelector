@@ -1,0 +1,82 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: "config.gradle"
+
+buildscript {
+    repositories {
+        google()
+        jcenter() // 显式添加，虽然它不稳定
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url "https://repo.grails.org/grails/core/" }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.4.0'
+//        classpath 'com.android.tools.build:gradle:8.13.2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter() // 显式添加，虽然它不稳定
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url "https://repo.grails.org/grails/core/" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+//task mergeJar(type: Jar) {
+//    // 指定最终JAR的名字
+//    archiveBaseName = 'PictureSelectorJar'
+//    // 从各个模块的编译结果目录中收集所有class文件
+//    from(project(':camerax').file('build/intermediates/runtime_library_classes_jar/release'))
+//    from(project(':compress').file('build/intermediates/runtime_library_classes_jar/release'))
+//    from(project(':ijkplayer').file('build/intermediates/runtime_library_classes_jar/release'))
+//    from(project(':selector').file('build/intermediates/runtime_library_classes_jar/release'))
+//    from(project(':ucrop').file('build/intermediates/runtime_library_classes_jar/release'))
+//    // 依赖这些模块的编译任务
+//    dependsOn tasks.getByPath(':camerax:compileReleaseJavaWithJavac')
+//    dependsOn tasks.getByPath(':compress:compileReleaseJavaWithJavac')
+//    dependsOn tasks.getByPath(':ijkplayer:compileReleaseJavaWithJavac')
+//    dependsOn tasks.getByPath(':selector:compileReleaseJavaWithJavac')
+//    dependsOn tasks.getByPath(':ucrop:compileReleaseJavaWithJavac')
+//}
+
+tasks.register('buildCombinedJar', Jar) {
+    archiveFileName = "PictureSelector-Sdk-v1.0.jar"
+    destinationDirectory = file("$buildDir/outputs/jar")
+
+    // 定义你需要合并的所有 Module 名称
+    def subprojectsToInclude = [':camerax', ':compress', ':ijkplayer', ':selector', ':ucrop']
+
+    subprojectsToInclude.each { name ->
+        def subproject = project(name)
+        // 确保在打包前，这些 module 已经编译完成
+        dependsOn("${name}:assembleRelease")
+
+        // 将各 module 编译后的 class 文件路径加入 JAR
+        from(subproject.file("build/intermediates/javac/release/classes"))
+        // 如果有 Kotlin 代码，还需要加上 kotlin 的路径
+        from(subproject.file("build/tmp/kotlin-classes/release"))
+    }
+
+    // 排除掉 R 文件和 BuildConfig（可选，避免冲突）
+    exclude '**/R.class'
+    exclude '**/R$*.class'
+    exclude '**/BuildConfig.class'
+}

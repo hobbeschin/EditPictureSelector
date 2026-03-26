@@ -1,0 +1,68 @@
+plugins {
+    id 'com.android.library'
+    id 'maven-publish' // 1. 必须引入此插件
+}
+
+android {
+    compileSdkVersion 34
+    buildToolsVersion "34.0.0"
+    namespace "com.luck.lib.camerax"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 34
+
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // 2. 必须开启下面这个配置，JitPack 才能识别你的 AAR 变体
+    publishing {
+        singleVariant('release') {
+            withSourcesJar() // 可选：发布源码，方便别人查看你的代码逻辑
+            withJavadocJar() // 可选：发布文档
+        }
+    }
+}
+
+// 3. 配置发布信息
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.hobbeschin' // 你的 GitHub 用户名
+                artifactId = 'camerax'       // 你的库名称
+                version = '1.0.0'                    // 版本号
+            }
+        }
+    }
+}
+
+ext {
+    PUBLISH_ARTIFACT_ID = "camerax"
+}
+
+apply from: '../publish.gradle'
+
+dependencies {
+    def camerax_version = "1.2.1"
+    api "androidx.camera:camera-core:${camerax_version}"
+    api "androidx.camera:camera-camera2:${camerax_version}"
+    implementation "androidx.camera:camera-view:${camerax_version}"
+    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+    implementation "androidx.appcompat:appcompat:${cfgs.version_appcompat}"
+    implementation "androidx.transition:transition:${cfgs.transition}"
+    implementation "androidx.concurrent:concurrent-futures:${cfgs.futures}"
+}

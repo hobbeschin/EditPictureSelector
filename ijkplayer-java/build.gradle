@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish' // 1. 必须引入此插件
+
+android {
+    // http://tools.android.com/tech-docs/new-build-system/tips
+    //noinspection GroovyAssignabilityCheck
+    compileSdkVersion 34
+    //noinspection GroovyAssignabilityCheck
+    buildToolsVersion "34.0.0"
+    namespace "tv.danmaku.ijk.media.player"
+
+    lintOptions {
+        abortOnError false
+    }
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 34
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // 2. 必须开启下面这个配置，JitPack 才能识别你的 AAR 变体
+    publishing {
+        singleVariant('release') {
+            withSourcesJar() // 可选：发布源码，方便别人查看你的代码逻辑
+            withJavadocJar() // 可选：发布文档
+        }
+    }
+}
+
+// 3. 配置发布信息
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.hobbeschin' // 你的 GitHub 用户名
+                artifactId = 'ijk.player'       // 你的库名称
+                version = '1.0.0'                    // 版本号
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
