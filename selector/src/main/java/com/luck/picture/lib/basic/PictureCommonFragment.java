@@ -1380,14 +1380,12 @@ public abstract class PictureCommonFragment extends Fragment implements IPicture
             return;
         }
         String inputMsg = getInputMsg();
-        Log.e(TAG, "dispatchTransformResult: inputMsg============" + inputMsg);
         ArrayList<LocalMedia> selectedResult = selectorConfig.getSelectedResult();
         ArrayList<LocalMedia> result = new ArrayList<>();
         for (int i = 0; i < selectedResult.size(); i++) {
             selectedResult.get(i).setInputMsg(inputMsg);
             result.add(selectedResult.get(i));
         }
-        Log.e(TAG, "dispatchTransformResult: result.size()============" + result.size());
         if (checkCropValidity()) {
             onCrop(result);
         } else if (checkOldCropValidity()) {

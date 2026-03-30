@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_color_white">
+    android:background="@color/app_color_white_transparent">
 
 
     <com.luck.picture.lib.widget.MediumBoldTextView
@@ -46,5 +46,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/ps_view_press"
+        android:layout_alignParentBottom="true"
+        android:hint="请输入文本"
+        android:paddingStart="5dp"/>
 </RelativeLayout>
