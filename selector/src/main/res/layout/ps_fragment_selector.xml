@@ -50,7 +50,7 @@
             android:id="@+id/etInputMsg"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:background="@drawable/ps_transparent_space"
+            android:background="@drawable/ps_white_space"
             android:hint="请输入内容"
             tools:text="ps_fragment_selector"
             android:paddingStart="5dp"
