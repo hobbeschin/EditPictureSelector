@@ -16,7 +16,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.13.2'
-//        classpath 'com.android.tools.build:gradle:8.13.2'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
     }
 }
@@ -39,23 +38,6 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-//task mergeJar(type: Jar) {
-//    // 指定最终JAR的名字
-//    archiveBaseName = 'PictureSelectorJar'
-//    // 从各个模块的编译结果目录中收集所有class文件
-//    from(project(':camerax').file('build/intermediates/runtime_library_classes_jar/release'))
-//    from(project(':compress').file('build/intermediates/runtime_library_classes_jar/release'))
-//    from(project(':ijkplayer').file('build/intermediates/runtime_library_classes_jar/release'))
-//    from(project(':selector').file('build/intermediates/runtime_library_classes_jar/release'))
-//    from(project(':ucrop').file('build/intermediates/runtime_library_classes_jar/release'))
-//    // 依赖这些模块的编译任务
-//    dependsOn tasks.getByPath(':camerax:compileReleaseJavaWithJavac')
-//    dependsOn tasks.getByPath(':compress:compileReleaseJavaWithJavac')
-//    dependsOn tasks.getByPath(':ijkplayer:compileReleaseJavaWithJavac')
-//    dependsOn tasks.getByPath(':selector:compileReleaseJavaWithJavac')
-//    dependsOn tasks.getByPath(':ucrop:compileReleaseJavaWithJavac')
-//}
 
 tasks.register('buildCombinedJar', Jar) {
     archiveFileName = "PictureSelector-Sdk-v1.0.jar"

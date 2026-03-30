@@ -31,7 +31,6 @@ android {
     // 2. 必须开启下面这个配置，JitPack 才能识别你的 AAR 变体
     publishing {
         singleVariant('release') {
-            withSourcesJar() // 可选：发布源码，方便别人查看你的代码逻辑
             withJavadocJar() // 可选：发布文档
         }
     }
