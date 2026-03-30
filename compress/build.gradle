@@ -20,6 +20,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     // 2. 必须开启下面这个配置，JitPack 才能识别你的 AAR 变体
     publishing {
         singleVariant('release') {
