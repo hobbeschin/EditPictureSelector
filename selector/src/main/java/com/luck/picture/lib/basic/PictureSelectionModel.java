@@ -619,6 +619,11 @@ public final class PictureSelectionModel {
         return this;
     }
 
+    public PictureSelectionModel setTitleBarBgColor(int bgColor) {
+        selectionConfig.titleBarBgColor = bgColor;
+        return this;
+    }
+
     /**
      * Select the minimum number of files
      *

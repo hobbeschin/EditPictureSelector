@@ -36,7 +36,7 @@ public class InjectFragmentActivity extends AppCompatActivity implements IBridge
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int color = ContextCompat.getColor(this, R.color.app_color_white);
+        int color = ContextCompat.getColor(this, com.luck.picture.lib.R.color.ps_color_white);
         ImmersiveManager.immersiveAboveAPI23(this, color, color, true);
         setContentView(R.layout.activity_inject_fragment);
         tvResult = findViewById(R.id.tv_result);

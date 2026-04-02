@@ -79,13 +79,22 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
         rlAlbumBg.setOnClickListener(this);
         titleBarLayout.setOnClickListener(this);
         viewAlbumClickArea.setOnClickListener(this);
-        setBackgroundColor(ContextCompat.getColor(getContext(), R.color.ps_color_grey));
+        setBackgroundColor(ContextCompat.getColor(getContext(), getTitleBarBgColor()));
         handleLayoutUI();
         if (TextUtils.isEmpty(config.defaultAlbumName)) {
             setTitle(config.chooseMode == SelectMimeType.ofAudio() ? getContext().getString(R.string.ps_all_audio) : getContext().getString(R.string.ps_camera_roll));
         } else {
             setTitle(config.defaultAlbumName);
         }
+    }
+
+    private int titleBarBgColor = R.color.ps_color_grey;
+    public int getTitleBarBgColor() {
+        return titleBarBgColor <= 0 ? R.color.ps_color_grey : titleBarBgColor;
+    }
+
+    public void setTitleBarBgColor(int bgColor) {
+        titleBarBgColor = bgColor;
     }
 
     protected void inflateLayout() {
