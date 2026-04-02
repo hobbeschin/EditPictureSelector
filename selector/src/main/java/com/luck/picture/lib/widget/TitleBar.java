@@ -129,6 +129,12 @@ public class TitleBar extends RelativeLayout implements View.OnClickListener {
         return tvTitle.getText().toString();
     }
 
+    public void hideTopStatusBar(boolean isHideStatusBar) {
+        if (isHideStatusBar) {
+            viewTopStatusBar.setVisibility(View.GONE);
+        }
+    }
+
     public void setTitleBarStyle() {
         if (config.isPreviewFullScreenMode) {
             ViewGroup.LayoutParams layoutParams = viewTopStatusBar.getLayoutParams();

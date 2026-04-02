@@ -145,6 +145,7 @@ public final class SelectorConfig {
     public boolean isUseSystemVideoPlayer;
     public boolean isNewKeyBackMode;
     public PictureSelectorStyle selectorStyle;
+    public boolean isHideStatusBar;
 
     public SelectorConfig() {
         initDefaultValue();
@@ -244,6 +245,7 @@ public final class SelectorConfig {
         isPreloadFirst = true;
         isNewKeyBackMode = true;
         isUseSystemVideoPlayer = false;
+        isHideStatusBar = false;
     }
 
     /**
@@ -387,6 +389,7 @@ public final class SelectorConfig {
         selectedResult.clear();
         albumDataSource.clear();
         selectedPreviewResult.clear();
+        isHideStatusBar = false;
         PictureThreadUtils.cancel(PictureThreadUtils.getIoPool());
         BuildRecycleItemViewParams.clear();
         FileDirMap.clear();

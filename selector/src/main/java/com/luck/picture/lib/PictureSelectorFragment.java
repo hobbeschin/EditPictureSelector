@@ -3,12 +3,14 @@ package com.luck.picture.lib;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowInsets;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -64,6 +66,7 @@ import com.luck.picture.lib.utils.AnimUtils;
 import com.luck.picture.lib.utils.DateUtils;
 import com.luck.picture.lib.utils.DensityUtil;
 import com.luck.picture.lib.utils.DoubleUtils;
+import com.luck.picture.lib.utils.KeyboardUtils;
 import com.luck.picture.lib.utils.StyleUtils;
 import com.luck.picture.lib.utils.ToastUtils;
 import com.luck.picture.lib.utils.ValueOf;
@@ -269,11 +272,12 @@ public class PictureSelectorFragment extends PictureCommonFragment
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
+                    Log.e(TAG, "onFocusChange: 失去焦点，隐藏软键盘");
+                    KeyboardUtils.hideKeyboard(v);
                     return;
                 }
-                InputMethodManager imm = (InputMethodManager) requireActivity()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(etInputMsg, InputMethodManager.SHOW_IMPLICIT);
+                Log.e(TAG, "onFocusChange: 获取焦点，弹出软键盘");
+                KeyboardUtils.showKeyboardWithFocus(etInputMsg);
             }
         });
     }
@@ -329,7 +333,6 @@ public class PictureSelectorFragment extends PictureCommonFragment
             completeSelectView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.e(TAG, "onClick: 图片选择---已完成 按钮");
                     if (selectorConfig.isEmptyResultReturn && selectorConfig.getSelectCount() == 0) {
                         onExitPictureSelector();
                     } else {
@@ -359,6 +362,9 @@ public class PictureSelectorFragment extends PictureCommonFragment
         if (selectorConfig.selectorStyle.getTitleBarStyle().isHideTitleBar()) {
             titleBar.setVisibility(View.GONE);
         }
+
+        titleBar.hideTopStatusBar(selectorConfig.isHideStatusBar);
+
         titleBar.setTitleBarStyle();
         titleBar.setOnTitleBarListener(new TitleBar.OnTitleBarListener() {
             @Override
@@ -864,6 +870,23 @@ public class PictureSelectorFragment extends PictureCommonFragment
                         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.ps_anim_modal_in);
                         SELECT_ANIM_DURATION = (int) animation.getDuration();
                         selectedView.startAnimation(animation);
+                    }
+                }
+                Log.e(TAG, "setOnItemClickListener(): onSelected()，清理掉输入框焦点");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    WindowInsets insets = requireActivity().getWindow().getDecorView().getRootWindowInsets();
+                    boolean isVisible = insets.isVisible(WindowInsets.Type.ime());
+                    Log.e(TAG, "setOnItemClickListener(): onSelected()软键盘是否显示.isVisible：" + isVisible);
+                    if (isVisible) {
+                        etInputMsg.clearFocus();
+                        KeyboardUtils.hideKeyboard(etInputMsg);
+                    }
+                } else {
+                    try {
+                        boolean keyboardIsActive = KeyboardUtils.keyboardIsActive(etInputMsg);
+                        Log.e(TAG, "setOnItemClickListener(): onSelected()软键盘是否显示.keyboardIsActive：" + keyboardIsActive);
+                    } catch (Exception e) {
+                        Log.e(TAG, "setOnItemClickListener(): 清理输入框焦点，隐藏软键盘抛出异常", e);
                     }
                 }
                 return selectResultCode;

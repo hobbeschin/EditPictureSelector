@@ -614,6 +614,11 @@ public final class PictureSelectionModel {
         return this;
     }
 
+    public PictureSelectionModel setHideStatusBar(boolean isHideStatusBar) {
+        selectionConfig.isHideStatusBar = isHideStatusBar;
+        return this;
+    }
+
     /**
      * Select the minimum number of files
      *
